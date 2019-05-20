@@ -1,4 +1,4 @@
-# shoppingcart
+# Shoppingcart
 Create a shopping cart application.
 
 
