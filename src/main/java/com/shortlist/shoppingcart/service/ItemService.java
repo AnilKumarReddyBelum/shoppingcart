@@ -1,6 +1,7 @@
 package com.shortlist.shoppingcart.service;
 
 import java.util.Collection;
+import java.util.Set;
 
 import com.shortlist.shoppingcart.domain.Item;
 
@@ -15,5 +16,11 @@ public interface ItemService {
 	void deleteById(Long id);
 
 	Item fetchById(Long id);
+
+	void addItemsToCart(Long userId, Long cartId, Set<Item> items);
+
+	void removeItemsFromCart(Long userId, Long cartId, Set<Item> items);
+
+	void modifyItemsFromCart(Long userId, Long cartId, Set<Item> items);
 
 }

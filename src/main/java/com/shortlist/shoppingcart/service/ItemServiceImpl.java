@@ -1,6 +1,7 @@
 package com.shortlist.shoppingcart.service;
 
 import java.util.Collection;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -17,6 +18,12 @@ public class ItemServiceImpl implements ItemService {
 
 	@Autowired
 	ItemRepository itemRepository;
+
+	@Autowired
+	UserService userService;
+
+	@Autowired
+	CartService cartService;
 
 	@Override
 	public Item add(Item i) {
@@ -41,6 +48,43 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public Item fetchById(Long id) {
 		return itemRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+	}
+
+	@Override
+	public void addItemsToCart(Long userId, Long cartId, Set<Item> items) {
+		if (isValidUser(userId) && isValidCart(cartId)) {
+			
+		}
+	}
+
+	@Override
+	public void removeItemsFromCart(Long userId, Long cartId, Set<Item> items) {
+		if (isValidUser(userId) && isValidCart(cartId)) {
+
+		}
+	}
+
+	@Override
+	public void modifyItemsFromCart(Long userId, Long cartId, Set<Item> items) {
+		if (isValidUser(userId) && isValidCart(cartId)) {
+
+		}
+	}
+
+	private boolean isValidUser(Long userId) {
+		if (userService.fetchById(userId) != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean isValidCart(Long cartId) {
+		if (cartService.fetchById(cartId) != null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
