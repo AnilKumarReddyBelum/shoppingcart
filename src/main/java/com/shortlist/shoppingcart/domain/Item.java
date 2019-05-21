@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
 
 @Data
@@ -26,11 +28,8 @@ public class Item {
 	private Integer quantity;
 
 	@ManyToMany(mappedBy = "items")
+	@JsonBackReference
 	Set<Cart> carts;
-
-	private String createdBy;
-
-	private String updateBy;
 
 	private LocalDateTime createdOn;
 

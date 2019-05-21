@@ -12,6 +12,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 
 @Data
@@ -22,16 +25,13 @@ public class Cart {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@JsonBackReference
 	@ManyToMany
 	@JoinTable(name = "cart_item", joinColumns = @JoinColumn(name = "item_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
 	private Set<Item> items;
 
 	@OneToOne(mappedBy = "cart")
 	private User user;
-
-	private String createdBy;
-
-	private String updateBy;
 
 	private LocalDateTime createdOn;
 

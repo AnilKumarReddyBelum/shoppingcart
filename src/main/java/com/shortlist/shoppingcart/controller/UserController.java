@@ -67,10 +67,13 @@ public class UserController {
 
 		switch (operation) {
 		case "addItemsToCart":
+			itemService.addItemsToCart(userId, cartId, items);
 			break;
 		case "removeItemsFromCart":
+			itemService.removeItemsFromCart(userId, cartId, items);
 			break;
 		case "modifyItemsFromCart":
+			itemService.modifyItemsFromCart(userId, cartId, items);
 			break;
 
 		}

@@ -1,6 +1,8 @@
 package com.shortlist.shoppingcart.service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -8,6 +10,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.shortlist.shoppingcart.domain.Cart;
 import com.shortlist.shoppingcart.domain.Item;
 import com.shortlist.shoppingcart.exception.ResourceNotFoundException;
 import com.shortlist.shoppingcart.repository.ItemRepository;
@@ -27,11 +30,13 @@ public class ItemServiceImpl implements ItemService {
 
 	@Override
 	public Item add(Item i) {
+		auditFields(i, false);
 		return itemRepository.save(i);
 	}
 
 	@Override
 	public Item update(Item i) {
+		auditFields(i, true);
 		return itemRepository.save(i);
 	}
 
@@ -52,9 +57,17 @@ public class ItemServiceImpl implements ItemService {
 
 	@Override
 	public void addItemsToCart(Long userId, Long cartId, Set<Item> items) {
+		Cart cart = null;
+		Set<Cart> carts = null;
 		if (isValidUser(userId) && isValidCart(cartId)) {
-			
+			cart = cartService.fetchById(cartId);
+			carts = new HashSet<Cart>();
+			carts.add(cart);
+			for (Item i : items) {
+				i.setCarts(carts);
+			}
 		}
+		itemRepository.saveAll(items);
 	}
 
 	@Override
@@ -85,6 +98,20 @@ public class ItemServiceImpl implements ItemService {
 		} else {
 			return false;
 		}
+	}
+
+	private void auditFields(Item i, boolean isUpdateOperation) {
+		if (isUpdateOperation) {
+			i.setUpdatedOn(LocalDateTime.now());
+		} else {
+			i.setCreatedOn(LocalDateTime.now());
+			i.setUpdatedOn(LocalDateTime.now());
+		}
+	}
+
+	@Override
+	public Collection<Item> addAll(Set<Item> set) {
+		return itemRepository.saveAll(set);
 	}
 
 }

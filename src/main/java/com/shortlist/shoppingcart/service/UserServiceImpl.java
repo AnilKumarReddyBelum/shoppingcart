@@ -1,5 +1,6 @@
 package com.shortlist.shoppingcart.service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User add(User u) {
+		auditFields(u, false);
 		return userRepository.save(u);
 	}
 
 	@Override
 	public User update(User u) {
+		auditFields(u, true);
 		return userRepository.save(u);
 	}
 
@@ -40,6 +43,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User fetchById(Long id) {
 		return userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+	}
+
+	private void auditFields(User u, boolean isUpdateOperation) {
+		if (isUpdateOperation) {
+			u.setUpdateBy(u.getName());
+			u.setUpdatedOn(LocalDateTime.now());
+		} else {
+			u.setCreatedBy(u.getName());
+			u.setCreatedOn(LocalDateTime.now());
+			u.setUpdateBy(u.getName());
+			u.setUpdatedOn(LocalDateTime.now());
+		}
 	}
 
 }
